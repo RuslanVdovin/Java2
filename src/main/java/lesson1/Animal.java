@@ -1,13 +1,13 @@
 package lesson1;
 
-public class Human implements Movement{
+public class Animal implements Movement{
 
     private String name;
     private int runDistance;
     private float jumpHeight;
     private boolean active;
 
-    public Human(String name, int runDistance, float jumpHeight) {
+    public Animal(String name, int runDistance, float jumpHeight) {
         this.name = name;
         this.runDistance = runDistance;
         this.jumpHeight = jumpHeight;
@@ -17,7 +17,7 @@ public class Human implements Movement{
     @Override
     public void run(int distance) {
         if(distance <= runDistance)
-        System.out.println(name + " ran " + distance + " meters");
+            System.out.println(name + " ran " + distance + " meters");
         else {
             System.out.println(name + " cannot ran this distance");
             active = false;
@@ -27,7 +27,7 @@ public class Human implements Movement{
     @Override
     public void jump(float height) {
         if(height <= jumpHeight)
-        System.out.println(name + " jumped " + height + " meters");
+            System.out.println(name + " jumped " + height + " meters");
         else {
             System.out.println(name + " cannot jump such a height");
             active = false;
