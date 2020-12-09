@@ -13,10 +13,12 @@ public class RegController {
 
     public TextField txtUsername;
     public TextField txtPass;
+   // String nickName;
 
     public void Reg(ActionEvent actionEvent) throws IOException {
         MockAuthServiceImpl.getInstance().addUser(txtUsername.getText(), txtPass.getText());
-        Parent chat = FXMLLoader.load(getClass().getResource("chat1.fxml"));
+       // nickName = txtUsername.getText();
+        Parent chat = FXMLLoader.load(getClass().getResource("chat.fxml"));
         Stage stage = new Stage();
         stage.setTitle("Сетевой чат");
         stage.setScene(new Scene(chat));
@@ -24,4 +26,8 @@ public class RegController {
         stage.show();
         txtPass.getScene().getWindow().hide();
     }
+
+//    public String getNickName() {
+//        return nickName;
+//    }
 }

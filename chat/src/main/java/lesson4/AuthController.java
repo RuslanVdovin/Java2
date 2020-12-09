@@ -22,7 +22,7 @@ public class AuthController {
         boolean auth = MockAuthServiceImpl.getInstance()
                 .auth(username.getText(), password.getText());
         if (auth) {
-            Parent chat = FXMLLoader.load(getClass().getResource("chat1.fxml"));
+            Parent chat = FXMLLoader.load(getClass().getResource("chat.fxml"));
             Stage stage = new Stage();
             stage.setTitle("Сетевой чат");
             stage.setScene(new Scene(chat));
