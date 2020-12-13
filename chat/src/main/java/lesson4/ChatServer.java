@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class ChatServer {
 
     private boolean running;
     private ConcurrentLinkedDeque<SerialHandler> clients = new ConcurrentLinkedDeque<>();
+    private HashMap<String, ArrayList<String>> groups = new HashMap<>();
 
     public ChatServer() {
         running = true;
@@ -51,6 +53,33 @@ public class ChatServer {
         }
     }
 
+    public HashMap<String, ArrayList<String>> getGroups() {
+        return groups;
+    }
+
+    public void newGroup(String name, ArrayList<String> members){
+        if(!groups.containsKey(name)) {
+            groups.put(name, members);
+        }
+    }
+
+    public void dropGroup(String name){
+        if(groups.containsKey(name)) {
+            groups.remove(name);
+        }
+    }
+    public void messageToGroup(String name, Message message) throws IOException {
+        if(groups.containsKey(name)){
+            ArrayList<String> nicks = groups.get(name);
+            for (SerialHandler client:clients) {
+                for (String nick: nicks){
+                    if(client.getUserName().equals(nick)){
+                        client.sendMessage(message);
+                    }
+                }
+            }
+        }
+    }
     public void kickMe(SerialHandler client) {
         clients.remove(client);
     }
