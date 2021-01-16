@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -62,27 +63,33 @@ public class SerialHandler implements Closeable, Runnable {
                     server.sendMessageTo(userName, nick, msg);
                     continue;
                 }
-//                if (message.getMessage().startsWith("/group")) {
-//                    String[] data = message.getMessage().split(" ");
-//                    for (int i = 1; i < data.length; i++) {
-//                        group.add(data[i]);
-//                        String nick = data[i];
-//                        String msg = String.format("User %s add in group", data[i]);
-//                        sendMessage(message);
-//                        server.sendMessageTo(userName, nick, msg);
-//
-//                    }
-//                }
-//
-//                if (message.getMessage().startsWith("/sendGroup")) {
-//                    String[] data = message.getMessage().split(" ");
-//                    String msg = data[1];
-//                    for (String nick : group) {
-//                        sendMessage(message);
-//                        server.sendMessageTo(userName, nick, msg);
-//                        continue;
-//                    }
-//                }
+                if (message.getMessage().startsWith("/group")) {
+                    String[] data = message.getMessage().split(" ");
+                    String nameOfGroup = data[1];
+                    ArrayList<String> members = new ArrayList<>();
+                    for (int i = 2; i< data.length; i++) {
+                        members.add(data[i]);
+                    }
+                    members.add(userName);
+                    server.newGroup(nameOfGroup, members);
+                    server.messageToGroup(nameOfGroup,
+                            Message.of(" ", "You were added to the group " + nameOfGroup));
+                    continue;
+                }
+
+                if (message.getMessage().startsWith("/sendGroup")) {
+                    String[] data = message.getMessage().split(" ");
+                    String name = data[1];
+                    if(!server.getGroups().containsKey(name)){
+                        continue;
+                    }
+                    String msgToGroup = data[2];
+                    for (int i = 3; i <data.length ; i++) {
+                        msgToGroup += data[i];
+                    }
+                    server.messageToGroup(name,Message.of(userName, msgToGroup));
+                    continue;
+                }
 
                 message.setAuthor(userName);
                 System.out.println(message);
